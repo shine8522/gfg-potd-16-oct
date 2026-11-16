@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ShineExplains · Kth Remaining Number</title>
+<style>
+:root{color-scheme:dark;--bg:#0e1116;--pn:#161b23;--bd:#2a3140;--tx:#eef1f6;--mu:#8691a3;--g:#22c55e;--r:#ef4444;--b:#3b82f6;--o:#f59e0b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{max-width:1360px;margin:auto;height:100%;display:flex;flex-direction:column;gap:10px;padding:10px 14px}
+#chips{display:flex;gap:6px;overflow-x:auto;flex:none}
+.chip{flex:none;padding:6px 12px;border:1px solid var(--bd);border-radius:20px;background:var(--pn);color:var(--mu);font-size:13px;cursor:pointer}
+.chip.on{color:#fff;border-color:var(--b);box-shadow:0 0 14px #3b82f655}
+#main{flex:1;min-height:0;display:grid;grid-template-columns:1.1fr 1fr;gap:10px}
+.pn{background:var(--pn);border:1px solid var(--bd);border-radius:14px;padding:16px;overflow:auto}
+#vis{display:flex;flex-direction:column;gap:22px;align-items:center;justify-content:center}
+.r{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;align-items:center}
+.b{font:700 22px ui-monospace,Menlo,monospace;width:46px;height:46px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bd);border-radius:10px;background:#1b212c;font-style:normal;position:relative;transition:.4s}
+.b.g{border-color:var(--g);color:#86efac}.b.c{border-color:var(--b);color:#93c5fd;box-shadow:0 0 18px #3b82f6aa;transform:scale(1.15)}
+.b.o{border-color:var(--o);color:#fcd34d;box-shadow:0 0 14px #f59e0b66}.b.x{border-color:var(--r);color:#7a3434}
+.b.x::after{content:"✕";position:absolute;color:var(--r);font-size:30px}
+.b.glow{box-shadow:0 0 26px #22c55e;transform:scale(1.15)}
+.d{font:700 26px monospace;color:var(--mu);font-style:normal}
+.cd{border:2px solid var(--bd);border-radius:12px;padding:10px 16px;font:600 20px ui-monospace,monospace;background:#1b212c}
+.cd b{color:#93c5fd}.cd.o{border-color:var(--o);color:#fcd34d}.cd.g{border-color:var(--g);color:#86efac}.cd.r{border-color:var(--r);color:#fca5a5}
+.cl{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;color:var(--mu)}
+.lb{font:600 12px system-ui;letter-spacing:.18em;color:var(--mu)}
+.cap{margin:0;font:600 17px/1.5 system-ui;color:#cbd5e1;text-align:center}
+table{border-collapse:collapse;font:15px ui-monospace,monospace}td,th{border:1px solid var(--bd);padding:5px 10px;text-align:center}th{color:var(--mu)}
+#code{font:14px/1.55 ui-monospace,Menlo,monospace;white-space:pre}
+.ln{padding:0 8px;border-left:3px solid transparent;color:#aab3c2}.ln.hb{background:#3b82f628;border-color:var(--b);color:#fff}.ln.ho{background:#f59e0b24;border-color:var(--o);color:#fff}
+#exp{flex:none;min-height:130px;max-height:34vh;overflow:auto;font-size:17px;line-height:1.55}
+#exp b{color:#fcd34d}#exp .h{font:700 12px system-ui;letter-spacing:.16em;color:var(--b);margin-bottom:4px}
+#ctl{flex:none;display:flex;gap:8px;align-items:center}
+button{background:var(--pn);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:9px 16px;font-size:15px;cursor:pointer}button:hover{border-color:var(--b)}
+#bar{flex:1;height:6px;background:#222a37;border-radius:4px;overflow:hidden}#bar i{display:block;height:100%;background:var(--b);transition:width .3s}
+.q{display:flex;flex-direction:column;gap:10px;width:100%;max-width:560px}.q p{margin:0;font:600 19px/1.4 system-ui}
+.q button{text-align:left}.q .ok{border-color:var(--g);background:#22c55e22}.q .no{border-color:var(--r);background:#ef444422}
+@media(max-width:860px){html,body{height:auto}#app{height:auto;min-height:100vh;min-height:100dvh;padding:8px 10px}#main{display:flex;flex-direction:column;flex:none}#vis{min-height:220px;gap:16px}#code{font-size:12px;max-height:40vh;overflow:auto}#exp{max-height:none;min-height:0;font-size:16px}.b{width:38px;height:38px;font-size:18px}.cd{font-size:15px;padding:8px 12px}.cap{font-size:15px}#ctl{position:sticky;bottom:0;background:var(--bg);padding:8px 0;z-index:5}button{padding:8px 12px;font-size:14px}}
+@media(max-width:420px){.b{width:34px;height:34px;font-size:16px}table{font-size:12px}td,th{padding:4px 6px}#cn{display:none}.q p{font-size:17px}}
+</style></head><body><div id="app">
+<div id="chips"></div>
+<div id="main"><div class="pn" id="vis"></div><div class="pn"><div id="code"></div></div></div>
+<div class="pn" id="exp"></div>
+<div id="ctl"><button id="pv">◀ Prev</button><button id="pp">▶ Play</button><button id="nx">Next ▶</button><div id="bar"><i></i></div><span id="cn" style="color:var(--mu);font-size:13px"></span></div>
+</div>
+<script>
+const $=s=>document.querySelector(s),rg=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+const bx=(n,c='')=>`<i class="b ${c}">${n}</i>`;
+const NL=(n,o={})=>`<div class=r>${rg(1,n).map(k=>bx(k,(o.x||[]).includes(k)?'x':o.c==k?'c':(o.o||[]).includes(k)?'o':o.v?'g':'')).join('')}<i class=d>…</i></div>`;
+const AR=(a,o={})=>`<div class=r>${a.map((k,i)=>bx(k,o.on===i?'c':o.o===i?'o':(o.d||[]).includes(i)?'g':'')).join('')}</div>`;
+const SV=o=>`<div class=r>${Object.entries(o).map(([k,v])=>`<div class=cd>${k} = <b>${v}</b></div>`).join('')}</div>`;
+const LB=t=>`<div class=lb>${t}</div>`,arr=[2,3,4,7,11];
+const CB=['int findKthSmall(vector<int>& arr, int k) {','','    int num = 1;','    int count = 0;','','    while(count < k) {','','        bool found = false;','','        for(int i = 0; i < arr.size(); i++) {','','            if(arr[i] == num) {','                found = true;','                break;','            }','        }','','        if(!found) {','            count++;','        }','','        if(count == k) {','            return num;','        }','','        num++;','    }','','    return -1;','}'];
+const CO=['int findKthSmall(vector<int>& arr, int k) {','','    sort(arr.begin(), arr.end());','','    int ans = k;','','    for(int i = 0; i < arr.size(); i++) {','','        if(arr[i] <= ans) {','            ans++;','        }','        else {','            break;','        }','    }','','    return ans;','}'];
+const HD=['#include <bits/stdc++.h>','using namespace std;',''],P=3;
+const D=[[0,2,5,'2 <= 5, true',6],[1,3,6,'3 <= 6, true',7],[2,4,7,'4 <= 7, true',8],[3,7,8,'7 <= 8, true',9],[4,11,9,'11 <= 9, false','Break']];
+const TB=n=>`<table><tr><th>i<th>arr[i]<th>ans<th>condition<th>new ans</tr>${D.slice(0,n).map(r=>`<tr><td>${r.join('<td>')}</tr>`).join('')}</table>`;
+const S=[],st=(s,v,t,c,l,o)=>S.push({s,v,t,c,l:l||[],o});
+const SEC={A:'A · Problem',B:'B · Brute force',C:'C · Inefficiency',D:'D · Discover',E:'E · Sorting',F:'F · Code, line by line',G:'G · Dry run',H:'H · Math',I:'I · Complexity',Q:'Check'};
+// A
+st('A',NL(14,{v:1})+LB('NATURAL NUMBERS 1, 2, 3, … (INFINITE)'),`We have an infinite sequence of natural numbers starting at 1. Given <b>arr = [2, 3, 4, 7, 11]</b> and <b>k = 5</b>, we remove every array element from the sequence and want the <b>kth smallest number that remains</b>.`);
+st('A',NL(14,{o:arr})+LB('INPUT ARRAY')+AR(arr,{d:[0,1,2,3,4]}),`Each array element finds its twin in the sequence: 2, 3, 4, 7 and 11 are the numbers that will be removed. Nothing else is touched.`);
+st('A',NL(14,{x:arr,v:1})+LB('REMOVED: 2, 3, 4, 7, 11'),`Crossed out. Everything else (green) is still in the sequence: 1, 5, 6, 8, 9, 10, 12, …`);
+st('A',`<div class=r>${[1,5,6,8,9].map((n,i)=>`<div class=cl>${bx(n,n==9?'g glow':'g')}${['1st','2nd','3rd','4th','5th'][i]}</div>`).join('')}<i class=d>…</i></div><div class="cd g">5th smallest = 9</div>`,`Number the <b>remaining</b> positions: 1st → 1, 2nd → 5, 3rd → 6, 4th → 8, 5th → <b>9</b>. We are <b>not</b> looking for the 5th number of the original sequence (that is 5). We want the 5th number <b>after</b> removing the array’s numbers.`);
+// B
+st('B',NL(12,{v:1})+`<div class=cd>What would I naturally do?</div>`,`If I had never seen this problem: generate 1, 2, 3, … one by one. For each number ask “is it in the array?”. If yes, skip it. If no, it survives, so count it. The moment the count reaches k, the current number is the answer.`,'b');
+const bs=(v,t,l,o)=>st('B',v,t,'b',l,o);
+bs(SV({k:5})+AR(arr),`<div class=h>LINE 1 · SIGNATURE</div>The array is passed <b>by reference</b>: no copy, so auxiliary space stays O(1). <b>k</b> is an input because the answer depends on which position we want. Remove either and the function has nothing to work on.`,[0]);
+bs(SV({num:1}),`<div class=h>int num = 1</div><b>num</b> is the natural number we are testing now. It starts at 1 because the sequence starts at 1. Starting anywhere else would skip valid numbers.`,[2]);
+bs(SV({num:1,count:0}),`<div class=h>int count = 0</div><b>count</b> = how many surviving numbers we have seen so far. We have seen none yet, so 0. Any other start shifts the answer.`,[3]);
+bs(SV({count:0,k:5}),`<div class=h>while(count &lt; k)</div>The sequence is infinite, so we cannot loop “for each number”. We keep going until we have found k survivors. Without the loop we would test only one number.`,[5],1);
+bs(SV({num:2,found:'false'}),`<div class=h>bool found = false</div>For every new <b>num</b> we assume “not removed” until the array proves otherwise. It must reset <b>inside</b> the loop: if it stayed true after num = 2, then 3, 4, … would wrongly look removed.`,[7]);
+bs(NL(6,{c:2})+AR(arr,{o:0}),`<div class=h>for(i = 0; i &lt; arr.size(); i++)</div>The array is not sorted, so any element could equal num. To be sure num is absent we must be able to look at the <b>whole</b> array. This is the expensive part.`,[9]);
+bs(AR(arr,{o:0})+SV({num:2,'arr[i]':2}),`<div class=h>if(arr[i] == num)</div>Compare each array element with num. A match means num is one of the removed numbers.`,[11],1);
+bs(SV({num:2,found:'true'}),`<div class=h>found = true</div>Record the match. The check after the loop needs it. Without it we could not tell “removed” from “survivor”.`,[12]);
+bs(AR(arr,{d:[0]})+`<div class="cd r">break</div>`,`<div class=h>break</div>Elements are distinct and we already know num is removed, so scanning further is pointless. Without <b>break</b> the answer stays correct but we waste time.`,[13]);
+bs(SV({num:1,found:'false',count:'0 → 1'}),`<div class=h>if(!found) count++</div>Only numbers <b>not</b> in the array survive, so only they increase count. If we counted removed numbers too, we would just return the kth natural number and ignore the deletions.`,[17,18],1);
+bs(SV({num:9,count:5,k:5})+`<div class="cd g">count == k → return 9</div>`,`<div class=h>if(count == k) return num</div>When count reaches k, <b>num</b> is the kth survivor. We check <b>before</b> num++ so we return the number that made the count reach k (9), not the next one (10).`,[21,22],1);
+bs(SV({num:'8 → 9'}),`<div class=h>num++</div>Move to the next natural number. Without it the loop would test the same num forever.`,[25]);
+bs(SV({'return':-1}),`<div class=h>return -1</div>Never reached for valid input (the sequence is infinite, so k survivors always exist), but the compiler needs a return on every path.`,[28]);
+bs(NL(12,{x:arr,c:9})+SV({count:5,k:5,answer:9}),`<b>Dry run:</b> 1 survives (count 1) · 2, 3, 4 skipped · 5 (2) · 6 (3) · 7 skipped · 8 (4) · 9 (5 = k) → return 9. <b>Time O(A × N)</b> (A = answer, N = array size), <b>auxiliary space O(1)</b>.`,[21,22]);
+// C
+st('C',[1,2,3,4].map(n=>`<div class=r><div class=cd>num = ${n}</div>${AR(arr,{o:-1}).replace(/class="b /g,'class="b o ')}</div>`).join(''),`For num = 1, 2, 3, 4 … we scan the <b>entire</b> array every single time, only to answer “is it there?”. The same unchanged array is searched again and again.`,'b',[9,11],1);
+st('C',AR(arr)+`<div class="cd o">Do we really need to generate every number and search for it?</div>`,`Think about what we truly need: only the <b>removed</b> numbers matter, because they are what disturbs the count. Can we use them directly instead of searching for them?`);
+// D
+st('D',NL(7,{c:5})+SV({k:5,ans:5}),`Easier question first: if <b>nothing</b> were removed, what is the 5th smallest? 1, 2, 3, 4, <b>5</b>. So our starting candidate is <b>ans = k = 5</b>.`);
+st('D',NL(8,{x:[2,3,4],c:5})+SV({'remaining ≤ 5':'1, 5','5 is only':'2nd'}),`Now bring in the removed numbers. Each removed number at or before the candidate steals one slot. Removed numbers ≤ 5: <b>2, 3, 4</b>. So 5 is really only the 2nd remaining number, not the 5th.`);
+st('D',NL(10,{x:[2,3,4],c:8})+`<div class="cd o">ans = 5 + 3 = 8</div>`,`We lost 3 slots, so move forward 3: <b>ans = 5 + 3 = 8</b>. But 8 is only an <b>intermediate</b> candidate: we have counted only removed numbers that were ≤ 5.`);
+st('D',NL(10,{x:[2,3,4],o:[7],c:8})+`<div class=cd>7 lies between 5 and 8</div>`,`While moving from 5 to 8 we crossed 6, 7, 8. <b>7 is a removed number</b> that is now at or before the candidate, but we never counted it when the candidate was 5. It also steals a slot.`);
+st('D',NL(12,{x:[2,3,4,7],c:9})+`<div class="cd o">ans = 8 + 1 = 9</div>`,`Count 7: move one more. <b>ans = 9</b>. Check: remaining 1, 5, 6, 8, <b>9</b> → 9 is the 5th. ✓`);
+st('D',NL(12,{x:arr,c:9})+AR(arr,{o:4})+`<div class="cd r">11 &gt; 9 → stop</div>`,`Next removed number is 11. It lies <b>beyond</b> the candidate 9, so it cannot push it. Nothing left can change the answer. Final answer: <b>9</b>.`);
+st('D',`<div class=r><div class=cd>5</div><i class=d>→ +3 (2, 3, 4) →</i><div class=cd>8</div><i class=d>→ +1 (7) →</i><div class="cd g">9</div></div>`,`Recap: 5 → 8 → 9. The number 7 became relevant only <b>after</b> the candidate reached 8. So every removed number must be compared with the <b>current</b> candidate, never with the original k.`);
+// E
+st('E',LB('UNSORTED')+AR([7,2,11,3,4])+`<i class=d>↓ sort in place</i>`+AR(arr,{d:[0,1,2,3,4]})+LB('SORTED'),`The input is <b>not guaranteed sorted</b>. We want to meet removed numbers from smallest to largest, the order in which the candidate reaches them. Sorting <b>in place</b> reorders the same array, so no extra array is created.`);
+st('E',AR([7,2,11,3,4])+`<div class="cd r">7 &lt;= 5 ? false → break → returns 5 ✗</div>`,`Why sorting matters: unsorted, we would meet 7 first, see 7 &gt; 5 and stop, even though 2, 3, 4 are still waiting. Sorted, the first number greater than ans means <b>all later ones are greater too</b>, so stopping early is safe.`);
+// F
+const fs=(v,t,l,o)=>st('F',v,t,'o',l,o);
+fs(AR([7,2,11,3,4])+SV({k:5}),`<div class=h>LINE 1 · SIGNATURE</div>Array by reference, so the sort below reorders the caller’s array and uses no copy; k is the position we want. Without the reference we would copy the array (O(N) extra space).`,[0]);
+fs(AR(arr,{d:[0,1,2,3,4]}),`<div class=h>sort(arr.begin(), arr.end())</div>Puts removed numbers in increasing order, which the loop and its early stop depend on. Without it the loop can stop too early (7 before 2, 3, 4) and return a wrong answer. State change: array becomes [2, 3, 4, 7, 11].`,[2]);
+fs(NL(7,{c:5})+SV({ans:5}),`<div class=h>int ans = k</div>If nothing were removed, the kth smallest is k, so k is the first candidate. Each removed number will push it forward. Without a starting candidate there is nothing to push.`,[4]);
+fs(AR(arr,{on:0}),`<div class=h>for(int i = 0; i &lt; arr.size(); i++)</div>We now inspect each <b>removed</b> number once, in order, instead of generating 1, 2, 3, … and searching the array for each. No nested scanning anymore.`,[6]);
+fs(AR(arr,{o:3})+`<div class=r><div class=cd>arr[i] = 7</div><div class="cd o">7 &lt;= ans (8)</div></div>`,`<div class=h>if(arr[i] &lt;= ans)</div>Is this removed number at or before the candidate? Then it occupies a slot there, so the candidate must move. <b>Equality matters</b>: if arr[i] == ans, the candidate itself is removed and cannot be the answer. We compare with the <b>updated</b> ans, not k: after ans moved to 8, 7 became relevant.`,[8],1);
+fs(SV({ans:'8 → 9'}),`<div class=h>ans++</div>A removed number at or before the candidate consumes exactly one position, so the kth remaining number is exactly one step further. Without it ans would never move.`,[9]);
+fs(AR(arr,{o:4})+`<div class="cd r">11 &lt;= 9 is false → break</div>`,`<div class=h>else { break; }</div>The first element greater than ans lies beyond the candidate. The array is sorted, so every later element is greater as well: none can change ans. Stopping early saves work; without it the result is the same but the loop runs on pointlessly.`,[11,12]);
+fs(SV({ans:9})+`<div class="cd g">return 9</div>`,`<div class=h>return ans</div>When the loop ends, every removed number at or before ans has been counted, so ans is the kth remaining number. Without return the caller gets nothing.`,[16]);
+// G
+st('G',AR(arr)+SV({k:5,ans:5})+TB(0),`Dry run: array sorted → [2, 3, 4, 7, 11]. Initialize <b>ans = k = 5</b>.`,'o',[2,4]);
+D.forEach((d,j)=>st('G',AR(arr,{on:j,d:rg(0,j-1).filter(x=>x>=0)})+`<div class=r><div class=cd>before: ans = <b>${d[2]}</b></div><div class="cd ${j<4?'o':'r'}">${d[3]}</div><div class=cd>after: ${d[4]=='Break'?'<b>break</b>':'ans = <b>'+d[4]+'</b>'}</div></div>`+TB(j+1),j<4?`<b>i = ${d[0]}</b>: arr[i] = ${d[1]}. Current ans (before) is ${d[2]}. Condition: ${d[3]}. New ans = ${d[4]}.`:`<b>i = 4</b>: arr[i] = 11, current ans = 9. 11 &lt;= 9 is false → <b>break</b>. 11 is beyond 9 and nothing after it can be smaller, so no removed number can change the answer. Return <b>9</b>.`,'o',j<4?[8,9]:[8,11,12],1));
+// H, I
+st('H',`<div class="cd">ans = k + (number of array elements ≤ ans)</div>${SV({ans:9,k:5,'elements ≤ 9':4})}`,`In plain words: start from k and keep accounting for every removed number that lies at or before the current candidate. The final answer is the candidate that no longer moves: 9 = 5 + 4 (the elements 2, 3, 4, 7). Processing the sorted array finds that stable candidate.`);
+st('I',`<table><tr><th>Part<th>Cost</tr><tr><td>Sort<td>O(N log N)</tr><tr><td>Traversal<td>O(N) worst case</tr><tr><td>Total time<td>O(N log N)</tr><tr><td>Our own variables<td>O(1)</tr></table>`,`Sorting costs O(N log N), the single traversal O(N), total <b>O(N log N)</b>. The traversal and our variables use <b>O(1)</b> auxiliary space. Careful: the internal stack usage of sorting depends on the library implementation, so we do not claim every standard sort is strictly O(1) extra space.`);
+const QS=[['If arr = [2, 3, 4, 7, 11] and k = 5, what is the initial ans?',['3','5','9','11'],1,'ans starts as k = 5: with nothing removed the 5th smallest would be 5. Removed numbers then push it forward.'],
+['When ans becomes 8, why do we need to process 7?',['7 is the smallest element','Because 7 is a removed number that is now ≤ the updated candidate 8','Because 7 is prime','Because 7 > 5'],1,'7 was beyond the original candidate 5, but once ans moved to 8, 7 lies at or before it, so it steals a slot too and must move ans once more.'],
+['Why can we stop when the next array element is 11?',['Because 11 is the last element','Because 11 > 9 and the array is sorted, so all later elements are also > 9','Because 11 is odd','Because ans must equal k'],1,'11 > 9 and the array is sorted, so every later element is larger than 9 as well. None can be at or before the candidate.']];
+QS.forEach(q=>{st('Q','',`Learning check: pick an answer.`);S[S.length-1].q=q});
+// engine
+let i=0,play=false,tm;
+$('#chips').innerHTML=Object.entries(SEC).map(([k,v])=>`<div class=chip data-s=${k}>${v}</div>`).join('');
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>go(S.findIndex(s=>s.s==c.dataset.s)));
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function go(n){i=Math.max(0,Math.min(S.length-1,n));const s=S[i];
+document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.dataset.s==s.s));
+if(s.c){const cd=s.c=='b'?CB:CO;$('#code').innerHTML=HD.concat(cd).map((l,j)=>{const h=s.l.includes(j-P);return`<div class="ln ${h?(s.o?'ho':'hb'):''}">${esc(l)||' '}</div>`}).join('')}
+const hl=$('#code .hb,#code .ho');if(hl){const cp=$('#code'),sc=cp.scrollHeight>cp.clientHeight+2?cp:cp.parentElement;sc.scrollTop+=hl.getBoundingClientRect().top-sc.getBoundingClientRect().top-70}
+const v=$('#vis');
+if(s.q){const[q,o,a,e]=s.q;v.innerHTML=`<div class=q><p>${q}</p>${o.map((t,k)=>`<button data-k=${k}>${t}</button>`).join('')}</div>`;$('#exp').innerHTML=s.t;
+v.querySelectorAll('button').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;v.querySelectorAll('button').forEach(x=>x.classList.remove('ok','no'));b.classList.add(k==a?'ok':'no');$('#exp').innerHTML=(k==a?'<b>Correct.</b> ':'<b>Not quite.</b> ')+`The answer is: ${o[a]}. ${e}`})}
+else{v.innerHTML=s.v;$('#exp').innerHTML=s.t}
+$('#bar i').style.width=(i+1)/S.length*100+'%';$('#cn').textContent=`${i+1} / ${S.length}`;clearTimeout(tm);
+if(play&&!s.q&&i<S.length-1)tm=setTimeout(()=>go(i+1),Math.max(6000,s.t.length*55));else if(play&&(s.q||i==S.length-1)){play=false;$('#pp').textContent='▶ Play'}}
+$('#pv').onclick=()=>go(i-1);$('#nx').onclick=()=>go(i+1);
+$('#pp').onclick=()=>{play=!play;$('#pp').textContent=play?'⏸ Pause':'▶ Play';if(play)go(i);else clearTimeout(tm)};
+addEventListener('keydown',e=>{if(e.key=='ArrowRight')go(i+1);if(e.key=='ArrowLeft')go(i-1);if(e.key==' '){e.preventDefault();$('#pp').click()}});
+go(0);
+</script></body></html>
